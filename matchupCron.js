@@ -44,7 +44,9 @@ const correctTeamName = teamName => {
         correctTeamName = splittedName.map((x, i) => i < n-1 && x !== "-" ? x : "").join(" ").trim();
     }
     // custom updates
-    const correctObj = {};
+    const correctObj = {
+	"VOLLEY": "VOLLEY 6",
+    };
     return correctTeamName in correctObj ? correctObj[correctTeamName] : correctTeamName;
 }
 
