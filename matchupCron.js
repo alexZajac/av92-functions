@@ -34,6 +34,20 @@ const teamData = [
     },
 ];
 
+const correctTeamName = teamName => {
+    const splittedName = teamName.split(" ");
+    const n = splittedName.length;
+    let correctTeamName = teamName;
+    // team level variation
+    if (!isNaN(splittedName[n-1]) && teamName[teamName.length-2] === " "){
+        // remove last charcters such as team level and -
+        correctTeamName = splittedName.map((x, i) => i < n-1 && x !== "-" ? x : "").join(" ").trim();
+    }
+    // custom updates
+    const correctObj = {};
+    return correctTeamName in correctObj ? correctObj[correctTeamName] : correctTeamName;
+}
+
 const parseMatchupRow = (row, childrenCount, defaultValue=null) => {
     const currentChild = row.children[childrenCount].children[0];
     return currentChild === undefined ? defaultValue : currentChild.data;
@@ -68,8 +82,8 @@ const processMatchup = async(row, teamCollection) => {
     // GMT offset
     const matchupDate = createDate(date, time);
     const isNextMatchup = false;
-    const teamHome = parseMatchupRow(row, 3);
-    const teamAway = parseMatchupRow(row, 5);
+    const teamHome = correctTeamName(parseMatchupRow(row, 3));
+    const teamAway = correctTeamName(parseMatchupRow(row, 5));
     let scoreHome = 0, scoreAway = 0;
     let court = null;
     // matchup already played
